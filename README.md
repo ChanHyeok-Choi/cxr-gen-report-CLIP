@@ -6,6 +6,8 @@ You can see our report for details: [here](./final_report.pdf)
 * Model architecture for training: ResNet18, EfficientNet-b4
 * Loss functions for training: Cross Entropy Loss, CLIP directional Loss
 * AdamW optimizer and 2e-3 learning rate
+* Result:
+    * Train Loss Plots(CE, CLIP): ![ResNet](./plot/ResNet%20%2B%20CLIP%20Loss.png), ![efficientNet](./plot/EfficientNet%20%2B%20CLIP%20Loss.png)
 
 * Reference:
 
