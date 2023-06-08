@@ -13,6 +13,9 @@ from torchtext.data.metrics import bleu_score
 from tqdm import tqdm
 from torchvision.models import efficientnet_b5
 
+import evaluate
+from ignite.metrics import Rouge
+
 logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -80,7 +83,7 @@ print(f'There are {len(train_dataset) :,} samples for training, and {len(val_dat
 ###################################
 mconf = ImageEncoderReportDecoderConfig(vocab_size, block_size, n_embd=img_enc_width)
 model = ImageEncoderReportDecoder(mconf, img_enc, img_enc_out_shape, rgb = rgb)
-model.load_state_dict(torch.load("./xray_model_original_CLIP_25.pth")) # xray_model_original.pth, xray_model_efficientUNet.pth, 
+model.load_state_dict(torch.load("./xray_model_original.pth")) # xray_model_original.pth, xray_model_original_CLIP_24.pth, xray_model_efficientUNet.pth, xray_model_efficientUNet_CLIP_27.pth
 #model.img_enc = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
 
 tgts = []
@@ -145,3 +148,28 @@ test_bleu_3 = bleu_score(preds_list, tgts_list, max_n=3, weights=[0,0,1])
 test_bleu_4 = bleu_score(preds_list, tgts_list, max_n=4, weights=[0,0,0,1])
 test_bleu_5 = bleu_score(preds_list, tgts_list, max_n=5, weights=[0,0,0,0,1])
 print(f"Bleu Scores:1:{test_bleu_1} \t 2:{test_bleu_2} \t 3:{test_bleu_3} \t 4:{test_bleu_4} \t 5:{test_bleu_5}")
+
+#######################
+# Rouge Score
+#######################
+m = Rouge(variants=["L", 2], multiref="best")
+m.update((preds_list, tgts_list))
+print(m.compute())
+
+#######################
+# METEOR Score
+#######################
+print(preds_list)
+print(tgts_list)
+preds_reports = []
+tgts_reports = []
+
+for pred in preds_list:
+    predicted = ' '.join(pred)
+    preds_reports.append(predicted)
+for trg in tgts_list:
+    trg = [*trg[0]]
+    target = ' '.join(trg)
+    tgts_reports.append(target)
+meteor = evaluate.load('meteor')
+print(meteor.compute(predictions=preds_reports, references=tgts_reports))
