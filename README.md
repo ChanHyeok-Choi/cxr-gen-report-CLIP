@@ -1,6 +1,6 @@
 # cxr-gen-report-CLIP
 
-You can see our report for details: [here](./final_report.pdf)
+You can see our [final report](./NLP_final.pdf) and [presentation](./Final_presentaion.pptx) for details.
 
 * Dataset: [IU X-ray](https://www.kaggle.com/datasets/raddar/chest-xrays-indiana-university), [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/) (Actually, we used [pretrained CLIP model](https://stanfordmedicine.app.box.com/s/dbebk0jr5651dj8x1cu6b6kqyuuvz3ml) with the dataset)
 * Model architecture for training: ResNet18, EfficientNet-b4
